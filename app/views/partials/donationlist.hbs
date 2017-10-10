@@ -7,21 +7,34 @@
       <table class="ui celled table segment">
         <thead>
         <tr>
-          <th>Donor</th>
           <th>Amount</th>
           <th>Method donated</th>
+          <th>Donor</th>
+          <th>Candidate</th>
         </tr>
         </thead>
         <tbody>
         {{#each donations}}
           <tr>
-            <td> {{donor.firstName}} {{donor.lastName}} </td>
             <td> {{amount}} </td>
             <td> {{method}} </td>
-
+            <td> {{donor.firstName}} {{donor.lastName}} </td>
+            <td> {{candidate.lastName}}, {{candidate.firstName}} </td>
           </tr>
+
+
         {{/each}}
+
+
         </tbody>
+        <tfoot>
+          <tr>
+            <th> {{total}} </th>
+            <th> Total </th>
+            <th></th>
+            <th></th>
+          </tr>
+        </tfoot>
       </table>
     </article>
   </div>

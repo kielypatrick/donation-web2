@@ -143,6 +143,7 @@ exports.settingsupdate = {
       abortEarly: false,
     },
 
+
   },
 
   handler: function (request, reply) {
