@@ -3,7 +3,18 @@
 const Hapi = require('hapi');
 
 var server = new Hapi.Server();
+// const fs = require('fs');
+// var options = {
+//   port: 4443,     //  or any port you wish
+//   tls: {
+//       key: fs.readFileSync('private/webserver.key'),
+//       cert: fs.readFileSync('private/webserver.crt')
+//   }
+// };
+// server.connection(options);
+
 server.connection({ port: process.env.PORT || 4000 });
+
 
 const initUsers = {
   'bart@simpson.com': {
@@ -58,6 +69,9 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
   });
 
   server.route(require('./routes'));
+  server.route(require('./routesapi'));
+
+
   server.start(err => {
     if (err) {
       throw err;
