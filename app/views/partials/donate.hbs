@@ -35,11 +35,7 @@
               </div>
             {{/each}}
           </div>
-          <input id="date" name="date">
 
-          <script type="text/javascript">
-            document.getElementById('date').value = tweetD;
-          </script>
           <button class="ui blue submit button">Donate</button>
         </form>
         {{> formerror }}
@@ -51,12 +47,12 @@
   </div>
 </section>
 
-<script>
-  function dateFormat() {
-    let dateFormat = require('helper-dateformat');
-    let tweetDate = new Date;
-    let sdf = tweetDate.dateFormat("dd MMM, yyyy")
+<!--<script>-->
+  <!--function dateFormat() {-->
+    <!--let dateFormat = require('helper-dateformat');-->
+    <!--let tweetDate = new Date;-->
+   <!--// let sdf = tweetDate.dateFormat("dd MMM, yyyy")-->
 
-  }
-</script>
+  <!--}-->
+<!--</script>-->
 

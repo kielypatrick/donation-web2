@@ -9,15 +9,20 @@ suite('Candidate API tests', function () {
 
   let candidates = fixtures.candidates;
   let newCandidate = fixtures.newCandidate;
+  let users = fixtures.users;
 
   const donationService = new DonationService('http://localhost:4000');
 
   beforeEach(function () {
+    donationService.login(users[1]);
     donationService.deleteAllCandidates();
   });
 
   afterEach(function () {
+
     donationService.deleteAllCandidates();
+    donationService.logout();
+
   });
 
   test('create a candidate', function () {

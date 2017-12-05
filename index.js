@@ -1,6 +1,10 @@
 'use strict';
 
 const Hapi = require('hapi');
+const corsHeaders = require('hapi-cors-headers');
+const utils = require('./app/api/utils.js');
+
+
 
 var server = new Hapi.Server();
 // const fs = require('fs');
@@ -37,19 +41,27 @@ const initUsers = {
 require('./app/models/db');
 
 
-server.register([require('inert'), require('vision'), require('hapi-auth-cookie')], err => {
+server.register([require('inert'), require('vision'), require('hapi-auth-cookie'), require('hapi-auth-jwt2')], err => {
 
   if (err) {
     throw err;
   }
 
-  server.auth.strategy('standard', 'cookie', {
+
+
+    server.auth.strategy('standard', 'cookie', {
     password: 'secretpasswordnotrevealedtoanyone',
     cookie: 'donation-cookie',
     isSecure: false,
     ttl: 24 * 60 * 60 * 1000,
     redirectTo: '/login',
 
+  });
+
+  server.auth.strategy('jwt', 'jwt', {
+    key: 'secretpasswordnotrevealedtoanyone',
+    validateFunc: utils.validate,
+    verifyOptions: { algorithms: ['HS256'] },
   });
 
   server.auth.default({
@@ -68,6 +80,7 @@ server.register([require('inert'), require('vision'), require('hapi-auth-cookie'
     isCached: false,
   });
 
+  server.ext('onPreResponse', corsHeaders);
   server.route(require('./routes'));
   server.route(require('./routesapi'));
 

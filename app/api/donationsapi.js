@@ -2,11 +2,12 @@
 
 const Donation = require('../models/donation');
 const Boom = require('boom');
+const utils = require('./utils.js');
+
 
 exports.findAllDonations = {
 
   auth: false,
-
   handler: function (request, reply) {
     Donation.find({}).populate('donor').populate('candidate').then(donations => {
       reply(donations);
@@ -18,8 +19,9 @@ exports.findAllDonations = {
 
 exports.findDonations = {
 
-  auth: false,
-
+  auth: {
+    strategy: 'jwt',
+  },
   handler: function (request, reply) {
     Donation.find({ candidate: request.params.id }).populate('donor').populate('candidate').then(donations => {
       reply(donations);
@@ -32,13 +34,18 @@ exports.findDonations = {
 
 exports.makeDonation = {
 
-  auth: false,
-
+  auth: {
+    strategy: 'jwt',
+  },
   handler: function (request, reply) {
     const donation = new Donation(request.payload);
     donation.candidate = request.params.id;
+
+    const authorization = request.headers.authorization;
     donation.save().then(newDonation => {
-      reply(newDonation).code(201);
+      Donation.findOne(newDonation).populate('candidate').then(donation => {
+        reply(donation).code(201);
+      });
     }).catch(err => {
       reply(Boom.badImplementation('error making donation'));
     });
@@ -48,8 +55,9 @@ exports.makeDonation = {
 
 exports.deleteAllDonations = {
 
-  auth: false,
-
+  auth: {
+    strategy: 'jwt',
+  },
   handler: function (request, reply) {
     Donation.remove({}).then(err => {
       reply().code(204);
@@ -57,5 +65,18 @@ exports.deleteAllDonations = {
       reply(Boom.badImplementation('error removing Donations'));
     });
   },
+};
 
+exports.deleteDonations = {
+
+  auth: {
+    strategy: 'jwt',
+  },
+  handler: function (request, reply) {
+    Donation.remove({ candidate: request.params.id }).then(result => {
+      reply().code(204);
+    }).catch(err => {
+      reply(Boom.badImplementation('error removing Donations'));
+    });
+  },
 };

@@ -52,6 +52,7 @@
       "method": "paypal",
       "donor": "->users.homer",
       "candidate": "->candidates.donald"
+
     }
   }
 }
